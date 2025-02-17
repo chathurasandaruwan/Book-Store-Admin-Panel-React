@@ -14,7 +14,7 @@ export function RootLayout() {
     const title = routeTitles[location?.pathname] || "Shop"
 
     return (
-        <div className="flex h-screen">
+        <div className="flex min-h-screen bg-gray-100">
             <MenuBar/>
             <div className="flex-1 flex flex-col transition-all duration-300">
                 <header className="bg-gray-800 text-white p-4 flex items-center">
