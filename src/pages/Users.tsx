@@ -1,9 +1,12 @@
 import {useState} from "react";
 import {UserForm} from "../component/UserForm.tsx";
 import {Pencil, Trash2} from "lucide-react";
+import {SearchBar} from "../component/SearchBar.tsx";
 
 export function Users() {
     const [editingUser, setEditingUser] = useState<number | null>(null);
+    const [searchText,setSearchText] = useState('');
+    console.log(searchText)
     const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
     ]
@@ -11,6 +14,7 @@ export function Users() {
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Users Management</h2>
+                <SearchBar setText={setSearchText}></SearchBar>
                 <button
                     onClick={() => setEditingUser(0)}
                     className="bg-black text-white px-4 py-2 border-2 rounded hover:bg-gray-300 hover:text-black hover:cursor-pointer"
