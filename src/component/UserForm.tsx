@@ -1,16 +1,22 @@
 import React,{useState} from "react";
 
-interface BookFormProps {
-    bookId: number;
+interface UserFormProps {
+    userId: number;
     onClose: () => void;
 }
-export function BookForm({bookId, onClose}: BookFormProps) {
-    const [formData, setFormData] = useState({title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
+export function UserForm({userId, onClose}: UserFormProps) {
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        role: 'user',
+        status: 'active',});
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (bookId === 0) {
+        if (userId === 0) {
+            // add new user
             console.log()
         } else {
+            // update user
             console.log()
         }
         onClose();
@@ -20,7 +26,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
                 <div className=" relative flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">
-                        {bookId === 0 ? 'Add New Book' : 'Edit Book'}
+                        {userId === 0 ? 'Add New User' : 'Edit User'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -30,7 +36,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                {/*<form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">Title</label>
                         <input
@@ -112,7 +118,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 border bg-gray-300 rounded hover:bg-black hover:text-white hover:cursor-pointer border-2 border-black"
+                            className="px-4 py-2 border rounded hover:bg-black hover:text-white hover:cursor-pointer border-2 border-black"
                         >
                             Cancel
                         </button>
@@ -120,7 +126,70 @@ export function BookForm({bookId, onClose}: BookFormProps) {
                             type="submit"
                             className="px-4 py-2 bg-black text-white rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                         >
-                            {bookId === 0 ? 'Add Book' : 'Update Book'}
+                            {userId === 0 ? 'Add User' : 'Update User'}
+                        </button>
+                    </div>
+                </form>*/}
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Name</label>
+                        <input
+                            type="text"
+                            value={formData.name}
+                            onChange={e => setFormData({...formData, name: e.target.value})}
+                            className="w-full border rounded p-2"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Email</label>
+                        <input
+                            type="email"
+                            value={formData.email}
+                            onChange={e => setFormData({...formData, email: e.target.value})}
+                            className="w-full border rounded p-2"
+                            required
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Role</label>
+                        <select
+                            value={formData.role}
+                            onChange={e => setFormData({...formData, role: e.target.value as 'admin' | 'user'})}
+                            className="w-full border rounded p-2"
+                        >
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium mb-1">Status</label>
+                        <select
+                            value={formData.status}
+                            onChange={e => setFormData({...formData, status: e.target.value as 'active' | 'inactive'})}
+                            className="w-full border rounded p-2"
+                        >
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+
+                    <div className="flex justify-end space-x-2">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            className="px-4 py-2 bg-gray-300 border rounded hover:bg-black hover:text-white hover:cursor-pointer border-2 border-black"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            className="px-4 py-2 bg-black text-white rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
+                        >
+                            {userId === 0 ? 'Add User' : 'Update User'}
                         </button>
                     </div>
                 </form>
