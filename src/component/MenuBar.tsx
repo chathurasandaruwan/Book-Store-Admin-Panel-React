@@ -40,7 +40,7 @@ export function MenuBar() {
             >
                 <div className="h-full flex flex-col">
                     <div className="p-4">
-                        <h1 className="text-2xl font-bold">Admin Panel</h1>
+                        <h1 className="text-2xl font-bold max-lg:pt-15">Admin Panel</h1>
                     </div>
 
                     <nav className="flex-1 p-4 space-y-2">
