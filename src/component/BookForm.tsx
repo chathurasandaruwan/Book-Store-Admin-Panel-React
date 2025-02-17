@@ -112,13 +112,13 @@ export function BookForm({bookId, onClose}: BookFormProps) {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="px-4 py-2 border rounded hover:bg-gray-100"
+                            className="px-4 py-2 border rounded hover:bg-black hover:text-white hover:cursor-pointer border-2 border-black"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-300 hover:text-black hover:cursor-pointer"
+                            className="px-4 py-2 bg-black text-white rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                         >
                             {bookId === 0 ? 'Add Book' : 'Update Book'}
                         </button>
