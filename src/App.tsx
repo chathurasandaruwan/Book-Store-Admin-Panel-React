@@ -1,11 +1,12 @@
 import './App.css'
+import {MenuBar} from "./component/MenuBar.tsx";
 
 function App() {
 
   return (
-    <>
-      <h1>Test</h1>
-    </>
+    <div className="flex min-h-screen bg-gray-100">
+        <MenuBar/>
+    </div>
   )
 }
 
