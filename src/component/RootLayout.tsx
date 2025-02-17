@@ -20,7 +20,7 @@ export function RootLayout() {
                 <header className="bg-black text-white p-4 max-lg:px-18 flex items-center">
                     <h1 className="text-xl font-semibold">{title}</h1>
                 </header>
-                <main className="p-4 flex-1 overflow-y-auto">
+                <main className="p-4 flex-1">
                     <Outlet />
                 </main>
             </div>
