@@ -1,9 +1,12 @@
 import {BookForm} from "../component/BookForm.tsx";
 import {useState} from "react";
 import { Pencil, Trash2 } from 'lucide-react';
+import {SearchBar} from "../component/SearchBar.tsx";
 
 export function Books() {
     const [editingBook, setEditingBook] = useState<number | null>(null);
+    const [searchText,setSearchText] = useState('');
+    console.log(searchText)
     const books = [
         { id: 1, title: 'Book 1', author: 'Author 1', price: 9.99, category: 'Category 1', image: 'src/assets/react.svg' },
         { id: 2, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 2', image: 'src/assets/react.svg' },
@@ -13,6 +16,7 @@ export function Books() {
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Books Management</h2>
+                <SearchBar setText={setSearchText}></SearchBar>
                 <button
                     onClick={() => setEditingBook(0)}
                     className="bg-black text-white px-4 py-2 rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
