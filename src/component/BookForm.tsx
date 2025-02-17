@@ -1,17 +1,19 @@
 import React,{useState} from "react";
-
+import {useDispatch} from "react-redux";
+import {saveBook, updateBook} from "../Slices/BookSlice.ts";
 interface BookFormProps {
     bookId: number;
     onClose: () => void;
 }
 export function BookForm({bookId, onClose}: BookFormProps) {
     const [formData, setFormData] = useState({title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
+    const dispatch = useDispatch();
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (bookId === 0) {
-            console.log()
+            dispatch(saveBook({ ...formData, id: Date.now() }));
         } else {
-            console.log()
+            dispatch(updateBook({ ...formData, id: bookId }));
         }
         onClose();
     };

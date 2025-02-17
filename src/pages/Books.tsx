@@ -2,15 +2,16 @@ import {BookForm} from "../component/BookForm.tsx";
 import {useState} from "react";
 import { Pencil, Trash2 } from 'lucide-react';
 import {SearchBar} from "../component/SearchBar.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteBook} from "../Slices/BookSlice.ts";
+import {Book} from "../interface/Book.ts";
 
 export function Books() {
     const [editingBook, setEditingBook] = useState<number | null>(null);
     const [searchText,setSearchText] = useState('');
-    console.log(searchText)
-    const books = [
-        { id: 1, title: 'Book 1', author: 'Author 1', price: 9.99, category: 'Category 1', image: 'src/assets/react.svg' },
-        { id: 2, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 2', image: 'src/assets/react.svg' },
-    ]
+    const dispatch = useDispatch();
+    const books:Book[] = useSelector(state => state.bookData);
+
 
     return (
         <div className="p-6">
@@ -45,8 +46,7 @@ export function Books() {
                                 <Pencil size={20}/>
                             </button>
                             <button
-                                onClick={() => {
-                                    console.log('delete')}}
+                                onClick={() => dispatch(deleteBook(book.id))}
                                 className="p-2 hover:bg-gray-100 rounded text-red-600 hover:cursor-pointer"
                             >
                                 <Trash2 size={20}/>

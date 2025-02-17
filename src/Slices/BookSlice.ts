@@ -18,13 +18,9 @@ const BookSlice = createSlice({
                 state[index] = { ...state[index], ...updateBooks };
             }
         },
-        deleteBook:(state, action )=>{
-            const index = action.payload
-            if (index !== -1) {
-                state.splice(index, 1);
-            }
+        deleteBook: (state, action) => {
+            return state.filter(book => book.id !== action.payload);
         },
-
     }
 })
 
