@@ -1,5 +1,6 @@
 import {useState} from "react";
 import { LayoutDashboard, BookOpen, Users, Menu, X } from 'lucide-react';
+import {NavLink} from "react-router";
 
 
 export function MenuBar() {
@@ -45,15 +46,21 @@ export function MenuBar() {
 
                     <nav className="flex-1 p-4 space-y-2">
                         {menuItems.map((item) => (
-                            <a
+                            <NavLink
                                 key={item.path}
-                                href={item.path}
+                                to={item.path}
                                 onClick={() => setIsOpen(false)}
-                                className="flex items-center p-2 space-x-2 rounded-md hover:bg-gray-800"
+                                className={({ isActive }) =>
+                                    `flex items-center space-x-2 p-2 rounded transition-colors ${
+                                        isActive
+                                            ? 'bg-white text-black'
+                                            : 'hover:bg-gray-800 text-white'
+                                    }`
+                                }
                             >
                                 <item.icon size={20} />
                                 <span>{item.label}</span>
-                            </a>
+                            </NavLink>
                         ))}
                     </nav>
 
