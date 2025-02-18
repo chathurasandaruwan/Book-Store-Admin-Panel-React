@@ -1,4 +1,7 @@
-import React,{useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {saveUser, updateUser} from "../Slices/UserSlice.ts";
+import {User} from "../interface/User.ts";
 
 interface UserFormProps {
     userId: number;
@@ -10,14 +13,22 @@ export function UserForm({userId, onClose}: UserFormProps) {
         email: '',
         role: 'user',
         status: 'active',});
+    const dispatch = useDispatch();
+    // Use select to update the form
+    const existingUser = useSelector((state) => state.userData.find((user:User) => user.id === userId));
+    useEffect(() => {
+        if (existingUser) {
+            setFormData(existingUser);
+        }
+    }, [existingUser]);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (userId === 0) {
             // add new user
-            console.log()
+            dispatch(saveUser({ ...formData, id: Date.now()}))
         } else {
             // update user
-            console.log()
+            dispatch(updateUser({ ...formData, id: userId }));
         }
         onClose();
     };

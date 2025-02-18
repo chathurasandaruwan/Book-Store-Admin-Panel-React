@@ -2,14 +2,19 @@ import {useState} from "react";
 import {UserForm} from "../component/UserForm.tsx";
 import {Pencil, Trash2} from "lucide-react";
 import {SearchBar} from "../component/SearchBar.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {User} from "../interface/User.ts";
+import {deleteUser} from "../Slices/UserSlice.ts";
 
 export function Users() {
     const [editingUser, setEditingUser] = useState<number | null>(null);
     const [searchText,setSearchText] = useState('');
-    console.log(searchText)
-    const users = [
+
+    const dispatch = useDispatch();
+    const users: User[] = useSelector(state => state.userData);
+    /*const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
-    ]
+    ]*/
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
@@ -61,8 +66,7 @@ export function Users() {
                                         <Pencil size={20}/>
                                     </button>
                                     <button
-                                        onClick={() => ()=>{
-                                            console.log('delete')}}
+                                        onClick={() => dispatch(deleteUser(user.id))}
                                         className="p-2 hover:bg-gray-100 rounded text-red-600 hover:cursor-pointer"
                                     >
                                         <Trash2 size={20}/>
