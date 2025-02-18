@@ -1,5 +1,5 @@
-import React,{useState} from "react";
-import {useDispatch} from "react-redux";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import {saveBook, updateBook} from "../Slices/BookSlice.ts";
 interface BookFormProps {
     bookId: number;
@@ -7,7 +7,15 @@ interface BookFormProps {
 }
 export function BookForm({bookId, onClose}: BookFormProps) {
     const [formData, setFormData] = useState({title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
+    const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
+    const existingBook = useSelector((state) => state.bookData.find(book => book.id === bookId));
+    useEffect(() => {
+        if (existingBook) {
+            setFormData(existingBook);
+        }
+    }, [existingBook]);
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (bookId === 0) {
@@ -17,10 +25,22 @@ export function BookForm({bookId, onClose}: BookFormProps) {
         }
         onClose();
     };
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    setFormData({ ...formData, image: reader.result as string });
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    };
     return (
         <div className="fixed h-screen inset-0 glass-effect flex items-center justify-center z-60">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
-                <div className=" relative flex justify-between items-center mb-4">
+                <div className="relative flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">
                         {bookId === 0 ? 'Add New Book' : 'Edit Book'}
                     </h2>
@@ -90,11 +110,12 @@ export function BookForm({bookId, onClose}: BookFormProps) {
 
                     <div>
                         <label className="block text-sm font-medium mb-1">Image URL</label>
+                        {/*{formData.image && <img id="previewImage" className="w-full h-48 object-cover rounded mb-4" src={formData.image} alt="Preview"/>}*/}
                         <input
                             type="file"
-                            value={formData.image}
-                            onChange={e => setFormData({...formData, image: e.target.value})}
+                            onChange={handleImageChange}
                             className="w-full border rounded p-2"
+                            ref={fileInputRef}
                             required
                         />
                     </div>
