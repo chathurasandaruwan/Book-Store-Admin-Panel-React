@@ -16,7 +16,6 @@ export function Books() {
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">Books Management</h2>
                 <SearchBar setText={setSearchText}></SearchBar>
                 <button
                     onClick={() => setEditingBook(0)}

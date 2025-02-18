@@ -1,15 +1,20 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {saveBook, updateBook} from "../Slices/BookSlice.ts";
+import {Book} from "../interface/Book.ts";
+
+
 interface BookFormProps {
     bookId: number;
     onClose: () => void;
 }
+
 export function BookForm({bookId, onClose}: BookFormProps) {
     const [formData, setFormData] = useState({title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
     const fileInputRef = useRef<HTMLInputElement>(null);
     const dispatch = useDispatch();
-    const existingBook = useSelector((state) => state.bookData.find(book => book.id === bookId));
+    const existingBook:Book = useSelector((state) => state.bookData.find((book:Book) => book.id === bookId));
+
     useEffect(() => {
         if (existingBook) {
             setFormData(existingBook);
