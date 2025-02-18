@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {Book} from "../interface/Book.ts";
 
 
-const initialState : Book[] = []
+const initialState : Book[] = [];
 
 const BookSlice = createSlice({
     name: "book",

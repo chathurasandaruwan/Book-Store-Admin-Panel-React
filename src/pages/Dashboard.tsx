@@ -1,17 +1,22 @@
 import { BookOpen, Users, DollarSign, Package } from 'lucide-react';
+import {useSelector} from "react-redux";
+import {Book} from "../interface/Book.ts";
+import {User} from "../interface/User.ts";
 
 export function Dashboard() {
-    const books = [
+    /*const books = [
         { id: 1, title: 'Book 1', author: 'Author 1', price: 9.99, category: 'Category 1', image: 'src/assets/react.svg', stock: 0 },
         { id: 2, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 2', image: 'src/assets/react.svg',stock:2 },
-        { id: 3, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 3', image: 'src/assets/react.svg',stock:2 },
-        { id: 4, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 4', image: 'src/assets/react.svg',stock:2 },
-        { id: 5, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 5', image: 'src/assets/react.svg',stock:2 },
-        { id: 6, title: 'Book 2', author: 'Author 2', price: 14.99, category: 'Category 6', image: 'src/assets/react.svg',stock:2 },
+        { id: 3, title: 'Book 3', author: 'Author 3', price: 15.99, category: 'Category 3', image: 'src/assets/react.svg',stock:0 },
+        { id: 4, title: 'Book 4', author: 'Author 4', price: 16.99, category: 'Category 4', image: 'src/assets/react.svg',stock:21 },
+        { id: 5, title: 'Book 5', author: 'Author 5', price: 17.99, category: 'Category 5', image: 'src/assets/react.svg',stock:24 },
+        { id: 6, title: 'Book 6', author: 'Author 6', price: 18.99, category: 'Category 6', image: 'src/assets/react.svg',stock:20 },
     ];
     const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
-    ]
+    ]*/
+    const books:Book[] = useSelector(state => state.bookData);
+    const users:User[] = useSelector(state => state.userData);
 
     const totalBooks = books.length;
     const totalUsers = users.length;
