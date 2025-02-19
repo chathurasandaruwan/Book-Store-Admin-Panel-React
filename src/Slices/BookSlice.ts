@@ -67,6 +67,9 @@ const BookSlice = createSlice({
             .addCase(getBooks.fulfilled,(state, action)=>{
                 console.log("books get fulfilled");
                 state = action.payload;
+                state.map((book)=>{
+                    console.log(book.image)
+                })
                 return state;
             })
             .addCase(getBooks.pending,(state,action)=>{

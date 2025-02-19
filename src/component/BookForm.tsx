@@ -6,7 +6,7 @@ import {AppDispatch, RootState} from "../store/Store.ts";
 
 
 interface BookFormProps {
-    bookId: number;
+    bookId: number | string;
     onClose: () => void;
 }
 
@@ -21,6 +21,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
             setFormData(existingBook);
         }
     }, [existingBook]);
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
