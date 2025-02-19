@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {saveBook, updateBook} from "../Slices/BookSlice.ts";
+import {addBook, saveBook, updateBook} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
-import {RootState} from "../store/Store.ts";
+import {AppDispatch, RootState} from "../store/Store.ts";
 
 
 interface BookFormProps {
@@ -13,9 +13,9 @@ interface BookFormProps {
 export function BookForm({bookId, onClose}: BookFormProps) {
     const [formData, setFormData] = useState({title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const existingBook = useSelector((state:RootState) => state.bookData.find((book:Book) => book.id === bookId));
-
+//load update form
     useEffect(() => {
         if (existingBook) {
             setFormData(existingBook);
@@ -24,14 +24,16 @@ export function BookForm({bookId, onClose}: BookFormProps) {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        //save book
         if (bookId === 0) {
-            dispatch(saveBook({ ...formData, id: Date.now() }));
+            dispatch(addBook({...formData, id:Date.now()}));
         } else {
+            //update book
             dispatch(updateBook({ ...formData, id: bookId }));
         }
         onClose();
     };
-    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    /*const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
             const reader = new FileReader();
@@ -42,7 +44,21 @@ export function BookForm({bookId, onClose}: BookFormProps) {
             };
             reader.readAsDataURL(file);
         }
+    };*/
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    const base64String = reader.result.toString().split(",")[1]; // Extract Base64
+                    setFormData({ ...formData, image: base64String });
+                }
+            };
+            reader.readAsDataURL(file);
+        }
     };
+
     return (
         <div className="fixed h-screen inset-0 glass-effect flex items-center justify-center z-60">
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
