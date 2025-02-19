@@ -1,5 +1,6 @@
 import {useMemo, useState} from "react";
 import {Order} from "../interface/Order.ts";
+import {SearchBar} from "../component/SearchBar.tsx";
 
 const initialOrders: Order[] = [
     {
@@ -33,6 +34,7 @@ const initialOrders: Order[] = [
 export function Orders() {
     const [orders, setOrders] = useState<Order[]>(initialOrders)
     const [showPendingOnly, setShowPendingOnly] = useState(false)
+    const [searchText,setSearchText] = useState('');
 
     const filteredOrders = useMemo(() => {
         return showPendingOnly ? orders.filter((order) => order.status === "pending") : orders
@@ -45,11 +47,11 @@ export function Orders() {
     }
     return (
         <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Order Management</h1>
+            <SearchBar setText={setSearchText}/>
             <div className="mb-4">
                 <button
                     onClick={() => setShowPendingOnly(!showPendingOnly)}
-                    className={`px-4 py-2 rounded ${showPendingOnly ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-800"}`}
+                    className={`px-4 py-2 rounded hover:cursor-pointer ${showPendingOnly ? "bg-black border-2 text-white hover:bg-gray-300 hover:text-black" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
                 >
                     {showPendingOnly ? "Showing Pending Orders" : "Show All Orders"}
                 </button>
@@ -89,7 +91,7 @@ export function Orders() {
                                     onClick={() =>
                                         updateOrderStatus(order.orderId, order.status === "pending" ? "complete" : "pending")
                                     }
-                                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                                    className="bg-gray-500 hover:bg-gray-800 text-white font-bold py-1 px-2 rounded hover:cursor-pointer"
                                 >
                                     Toggle Status
                                 </button>

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import { LayoutDashboard, BookOpen, Users, Menu, X } from 'lucide-react';
+import {LayoutDashboard, BookOpen, Users, Menu, X, Package} from 'lucide-react';
 import {NavLink} from "react-router";
 
 
@@ -14,6 +14,7 @@ export function MenuBar() {
         { path: '/', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/books', icon: BookOpen, label: 'Books' },
         { path: '/users', icon: Users, label: 'Users' },
+        { path: '/orders', icon: Package, label: 'Order Detail' },
     ];
 
     return (
