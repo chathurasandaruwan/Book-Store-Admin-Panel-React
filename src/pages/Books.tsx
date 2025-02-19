@@ -5,12 +5,13 @@ import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {deleteBook} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
+import {RootState} from "../store/Store.ts";
 
 export function Books() {
     const [editingBook, setEditingBook] = useState<number | null>(null);
     const [searchText,setSearchText] = useState('');
     const dispatch = useDispatch();
-    const books:Book[] = useSelector(state => state.bookData);
+    const books:Book[] = useSelector((state:RootState) => state.bookData);
 
 
     return (

@@ -10,3 +10,4 @@ export const store = configureStore({
         orderData: OrderSlice
     }
 })
+export type RootState = ReturnType<typeof store.getState>;

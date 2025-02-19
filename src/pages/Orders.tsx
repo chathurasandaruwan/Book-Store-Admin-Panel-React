@@ -3,9 +3,10 @@ import {Order} from "../interface/Order.ts";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {updateOrder} from "../Slices/OrderSlice.ts";
+import {RootState} from "../store/Store.ts";
 
 export function Orders() {
-    const orders :Order[] = useSelector(state => state.orderData)
+    const orders :Order[] = useSelector((state:RootState) => state.orderData)
     const dispatch = useDispatch();
     const [showPendingOnly, setShowPendingOnly] = useState(false)
     const [searchText,setSearchText] = useState('');

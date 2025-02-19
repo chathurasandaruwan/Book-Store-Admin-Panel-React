@@ -2,6 +2,7 @@ import { BookOpen, Users, DollarSign, Package } from 'lucide-react';
 import {useSelector} from "react-redux";
 import {Book} from "../interface/Book.ts";
 import {User} from "../interface/User.ts";
+import {RootState} from "../store/Store.ts";
 
 export function Dashboard() {
     /*const books = [
@@ -15,8 +16,8 @@ export function Dashboard() {
     const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
     ]*/
-    const books:Book[] = useSelector(state => state.bookData);
-    const users:User[] = useSelector(state => state.userData);
+    const books:Book[] = useSelector((state:RootState) => state.bookData);
+    const users:User[] = useSelector((state:RootState) => state.userData);
 
     const totalBooks = books.length;
     const totalUsers = users.length;

@@ -5,13 +5,14 @@ import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {User} from "../interface/User.ts";
 import {deleteUser} from "../Slices/UserSlice.ts";
+import {RootState} from "../store/Store.ts";
 
 export function Users() {
     const [editingUser, setEditingUser] = useState<number | null>(null);
     const [searchText,setSearchText] = useState('');
 
     const dispatch = useDispatch();
-    const users: User[] = useSelector(state => state.userData);
+    const users: User[] = useSelector((state:RootState) => state.userData);
     /*const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
     ]*/
