@@ -9,7 +9,7 @@ const api = axios.create({
 });
 // connect with database
 //save book
-export const addBook = createAsyncThunk(
+export const addBookData = createAsyncThunk(
     'book/saveBook',
     async (book : Book)=>{
         try {
@@ -21,7 +21,7 @@ export const addBook = createAsyncThunk(
     }
 )
 // get All books
-export const getBooks = createAsyncThunk(
+export const getBooksData = createAsyncThunk(
     'book/getBook',
     async ()=>{
         try {
@@ -32,6 +32,18 @@ export const getBooks = createAsyncThunk(
         }
     }
 )
+//update book
+export const updateBookData = createAsyncThunk(
+    'customer/updateCustomer',
+    async ({ id, book }: { id: string; book: Book }) => {
+        try {
+            const response = await api.put('/update/'+id, book);
+            return response.data;
+        } catch (error) {
+            return console.log('error',error)
+        }
+    }
+);
 //slice manage
 const BookSlice = createSlice({
     name: "book",
@@ -53,18 +65,18 @@ const BookSlice = createSlice({
     },
     extraReducers:(builder)=>{
         builder
-            .addCase(addBook.fulfilled,(state, action)=>{
+            .addCase(addBookData.fulfilled,(state, action)=>{
                 state.push(action.payload)
                 console.log("book save fulfilled")
             })
-            .addCase(addBook.pending,(state,action)=>{
+            .addCase(addBookData.pending,(state, action)=>{
                 console.log("Pending");
             })
-            .addCase(addBook.rejected,(state,action)=>{
+            .addCase(addBookData.rejected,(state, action)=>{
                 console.log("Failed to save book: ",action.payload);
             });
         builder
-            .addCase(getBooks.fulfilled,(state, action)=>{
+            .addCase(getBooksData.fulfilled,(state, action)=>{
                 console.log("books get fulfilled");
                 state = action.payload;
                 state.map((book)=>{
@@ -72,11 +84,25 @@ const BookSlice = createSlice({
                 })
                 return state;
             })
-            .addCase(getBooks.pending,(state,action)=>{
+            .addCase(getBooksData.pending,(state, action)=>{
                 console.log("Pending");
             })
-            .addCase(getBooks.rejected,(state,action)=>{
+            .addCase(getBooksData.rejected,(state, action)=>{
                 console.log("Failed to get book: ",action.payload);
+            });
+        builder
+            .addCase(updateBookData.fulfilled,(state, action)=>{
+                console.log("book update fulfilled")
+                return state.map((book:Book)=>(
+                    book.id==action.payload.id ? {...book,title : action.payload.title, author : action.payload.author,price:action.payload.price,description:action.payload.description,
+                        category:action.payload.category,image:action.payload.image,stock:action.payload.stock} : book
+                ))
+            })
+            .addCase(updateBookData.pending,(state, action)=>{
+                console.log("Pending");
+            })
+            .addCase(updateBookData.rejected,(state, action)=>{
+                console.log("Failed to update book: ",action.payload);
             });
     }
 })

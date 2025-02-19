@@ -3,17 +3,17 @@ import {useEffect, useState} from "react";
 import { Pencil, Trash2 } from 'lucide-react';
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteBook, getBooks} from "../Slices/BookSlice.ts";
+import {deleteBook, getBooksData} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Books() {
-    const [editingBook, setEditingBook] = useState<string | null | number >(null);
+    const [editingBook, setEditingBook] = useState<string | null  >(null);
     const [searchText,setSearchText] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const books:Book[] = useSelector((state:RootState) => state.bookData);
     useEffect(() => {
-        dispatch(getBooks());
+        dispatch(getBooksData());
     }, [dispatch]);
 
     return (
@@ -21,7 +21,7 @@ export function Books() {
             <div className="flex justify-between items-center mb-6">
                 <SearchBar setText={setSearchText}></SearchBar>
                 <button
-                    onClick={() => setEditingBook(0)}
+                    onClick={() => setEditingBook('new')}
                     className="bg-black text-white px-4 py-2 rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                 >
                     Add New Book
