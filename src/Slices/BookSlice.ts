@@ -8,6 +8,7 @@ const api = axios.create({
     baseURL : "http://localhost:3000/book"
 });
 // connect with database
+//save book
 export const addBook = createAsyncThunk(
     'book/saveBook',
     async (book : Book)=>{
@@ -19,7 +20,18 @@ export const addBook = createAsyncThunk(
         }
     }
 )
-
+// get All books
+export const getBooks = createAsyncThunk(
+    'book/getBook',
+    async ()=>{
+        try {
+            const response = await api.get('/all');
+            return response.data;
+        }catch (error) {
+            return console.log('error',error)
+        }
+    }
+)
 //slice manage
 const BookSlice = createSlice({
     name: "book",
@@ -50,6 +62,18 @@ const BookSlice = createSlice({
             })
             .addCase(addBook.rejected,(state,action)=>{
                 console.log("Failed to save book: ",action.payload);
+            });
+        builder
+            .addCase(getBooks.fulfilled,(state, action)=>{
+                console.log("books get fulfilled");
+                state = action.payload;
+                return state;
+            })
+            .addCase(getBooks.pending,(state,action)=>{
+                console.log("Pending");
+            })
+            .addCase(getBooks.rejected,(state,action)=>{
+                console.log("Failed to get book: ",action.payload);
             });
     }
 })
