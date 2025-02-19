@@ -1,38 +1,12 @@
 import {useMemo, useState} from "react";
 import {Order} from "../interface/Order.ts";
 import {SearchBar} from "../component/SearchBar.tsx";
+import {useDispatch, useSelector} from "react-redux";
+import {updateOrder} from "../Slices/OrderSlice.ts";
 
-const initialOrders: Order[] = [
-    {
-        orderId: "ORD001",
-        userId: "USR001",
-        bookId: "BK001",
-        orderDate: "2023-05-15",
-        quantity: 2,
-        price: 29.99,
-        status: "pending",
-    },
-    {
-        orderId: "ORD002",
-        userId: "USR002",
-        bookId: "BK003",
-        orderDate: "2023-05-16",
-        quantity: 1,
-        price: 19.99,
-        status: "complete",
-    },
-    {
-        orderId: "ORD003",
-        userId: "USR003",
-        bookId: "BK002",
-        orderDate: "2023-05-17",
-        quantity: 3,
-        price: 39.99,
-        status: "pending",
-    },
-]
 export function Orders() {
-    const [orders, setOrders] = useState<Order[]>(initialOrders)
+    const orders :Order[] = useSelector(state => state.orderData)
+    const dispatch = useDispatch();
     const [showPendingOnly, setShowPendingOnly] = useState(false)
     const [searchText,setSearchText] = useState('');
 
@@ -41,9 +15,7 @@ export function Orders() {
     }, [orders, showPendingOnly])
 
     const updateOrderStatus = (orderId: string, newStatus: "pending" | "complete") => {
-        setOrders((prevOrders) =>
-            prevOrders.map((order) => (order.orderId === orderId ? { ...order, status: newStatus } : order)),
-        )
+        dispatch(updateOrder({ orderId, status: newStatus }));
     }
     return (
         <div className="container mx-auto p-4">
