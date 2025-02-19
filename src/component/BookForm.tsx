@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {addBookData, saveBook, updateBook, updateBookData} from "../Slices/BookSlice.ts";
+import {addBookData, updateBookData} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
@@ -13,12 +13,15 @@ interface BookFormProps {
 export function BookForm({bookId, onClose}: BookFormProps) {
     const [formData, setFormData] = useState<Book>({id:'',title: '', author: '', price: 0, description: '', category: '', image: '', stock: 0});
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [tempImgUrl,setTempImgUrl] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const existingBook = useSelector((state:RootState) => state.bookData.find((book:Book) => book.id === bookId));
 //load update form
     useEffect(() => {
         if (existingBook) {
             setFormData(existingBook);
+            const base64Image = existingBook.image.split(',')[1]
+            setTempImgUrl(base64Image)
         }
     }, [existingBook]);
 
@@ -30,22 +33,13 @@ export function BookForm({bookId, onClose}: BookFormProps) {
             dispatch(addBookData({...formData, id:'newId'}));
         } else {
             //update book
+            if (formData.image === '') {
+                setFormData(prevData => ({ ...prevData, image: tempImgUrl }));
+            }
             dispatch(updateBookData({book:formData, id: bookId }));
         }
         onClose();
     };
-    /*const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                if (reader.result) {
-                    setFormData({ ...formData, image: reader.result as string });
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    };*/
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (file) {
@@ -139,7 +133,6 @@ export function BookForm({bookId, onClose}: BookFormProps) {
                             onChange={handleImageChange}
                             className="w-full border rounded p-2"
                             ref={fileInputRef}
-                            required
                         />
                     </div>
 

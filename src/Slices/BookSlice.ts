@@ -34,10 +34,22 @@ export const getBooksData = createAsyncThunk(
 )
 //update book
 export const updateBookData = createAsyncThunk(
-    'customer/updateCustomer',
+    'book/updateBook',
     async ({ id, book }: { id: string; book: Book }) => {
         try {
             const response = await api.put('/update/'+id, book);
+            return response.data;
+        } catch (error) {
+            return console.log('error',error)
+        }
+    }
+);
+//delete book
+export const deleteBookData = createAsyncThunk(
+    'book/deleteBook',
+    async (id:string) => {
+        try {
+            const response = await api.delete('/delete/'+id);
             return response.data;
         } catch (error) {
             return console.log('error',error)
@@ -103,6 +115,18 @@ const BookSlice = createSlice({
             })
             .addCase(updateBookData.rejected,(state, action)=>{
                 console.log("Failed to update book: ",action.payload);
+            });
+        builder
+            .addCase(deleteBookData.fulfilled,(state, action)=>{
+                console.log("fulfilled");
+                state = state.filter((book:Book) => book.id !== action.payload.id);
+                return state
+            })
+            .addCase(deleteBookData.pending,(state, action)=>{
+                console.log("Pending");
+            })
+            .addCase(deleteBookData.rejected,(state, action)=>{
+                console.log("Failed to delete book: ",action.payload);
             });
     }
 })

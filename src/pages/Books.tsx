@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import { Pencil, Trash2 } from 'lucide-react';
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteBook, getBooksData} from "../Slices/BookSlice.ts";
+import {deleteBookData, getBooksData} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
@@ -48,7 +48,7 @@ export function Books() {
                                 <Pencil size={20}/>
                             </button>
                             <button
-                                onClick={() => dispatch(deleteBook(book.id))}
+                                onClick={() => dispatch(deleteBookData(book.id))}
                                 className="p-2 hover:bg-gray-100 rounded text-red-600 hover:cursor-pointer"
                             >
                                 <Trash2 size={20}/>
