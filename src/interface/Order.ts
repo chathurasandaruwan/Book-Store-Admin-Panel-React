@@ -1,9 +1,18 @@
 export interface Order {
-    orderId: string
+    /*orderId: string
     userId: string
     bookId: string
     orderDate: string
     quantity: number
     price: number
-    status: "pending" | "complete"
+    status: "pending" | "complete"*/
+    orderId: string;
+    userId: string;
+    orderDate: string;
+    status: "pending" | "complete";
+    books: {
+        bookId: string;
+        quantity: number;
+        price: number;
+    }[];
 }
