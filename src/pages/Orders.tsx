@@ -2,7 +2,7 @@ import {useEffect, useMemo, useState} from "react";
 import {Order} from "../interface/Order.ts";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {getOrdersData, updateOrder} from "../Slices/OrderSlice.ts";
+import {getOrdersData, updateOrder, updateOrderData} from "../Slices/OrderSlice.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Orders() {
@@ -21,7 +21,7 @@ export function Orders() {
     }, [orders, showPendingOnly])
 
     const updateOrderStatus = (orderId: string, newStatus: "pending" | "complete") => {
-        dispatch(updateOrder({ orderId, status: newStatus }));
+        dispatch(updateOrderData({ orderId, status: newStatus }));
     }
     return (
         <div className="container mx-auto p-4">
