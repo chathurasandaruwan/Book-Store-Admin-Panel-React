@@ -15,7 +15,11 @@ export function Books() {
     useEffect(() => {
         dispatch(getBooksData());
     }, [dispatch]);
-
+    if (searchText !== '') {
+        const book = books.filter(book => book.title.toLowerCase().includes(searchText.toLowerCase()));
+        setEditingBook(book[0].id);
+        setSearchText('');
+    }
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">

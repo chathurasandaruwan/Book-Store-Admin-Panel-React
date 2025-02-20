@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {saveUser, saveUserData, updateUser, updateUserData} from "../Slices/UserSlice.ts";
+import {saveUserData, updateUserData} from "../Slices/UserSlice.ts";
 import {User} from "../interface/User.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
@@ -49,101 +49,6 @@ export function UserForm({userId, onClose}: UserFormProps) {
                         ✕
                     </button>
                 </div>
-
-                {/*<form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Title</label>
-                        <input
-                            type="text"
-                            value={formData.title}
-                            onChange={e => setFormData({...formData, title: e.target.value})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Author</label>
-                        <input
-                            type="text"
-                            value={formData.author}
-                            onChange={e => setFormData({...formData, author: e.target.value})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Price</label>
-                        <input
-                            type="number"
-                            value={formData.price}
-                            onChange={e => setFormData({...formData, price: Number(e.target.value)})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Description</label>
-                        <textarea
-                            value={formData.description}
-                            onChange={e => setFormData({...formData, description: e.target.value})}
-                            className="w-full border rounded p-2"
-                            rows={3}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Category</label>
-                        <input
-                            type="text"
-                            value={formData.category}
-                            onChange={e => setFormData({...formData, category: e.target.value})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Image URL</label>
-                        <input
-                            type="file"
-                            value={formData.image}
-                            onChange={e => setFormData({...formData, image: e.target.value})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium mb-1">Stock</label>
-                        <input
-                            type="number"
-                            value={formData.stock}
-                            onChange={e => setFormData({...formData, stock: Number(e.target.value)})}
-                            className="w-full border rounded p-2"
-                            required
-                        />
-                    </div>
-
-                    <div className="flex justify-end space-x-2">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 border rounded hover:bg-black hover:text-white hover:cursor-pointer border-2 border-black"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-black text-white rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
-                        >
-                            {userId === 0 ? 'Add User' : 'Update User'}
-                        </button>
-                    </div>
-                </form>*/}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
                         <label className="block text-sm font-medium mb-1">Name</label>
