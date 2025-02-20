@@ -12,6 +12,7 @@ const api = axios.create({
 export const addBookData = createAsyncThunk(
     'book/saveBook',
     async (book : Book)=>{
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         try {
             const response = await api.post('/add',book);
             return response.data;
@@ -24,6 +25,7 @@ export const addBookData = createAsyncThunk(
 export const getBooksData = createAsyncThunk(
     'book/getBook',
     async ()=>{
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.get('/all');
             return response.data;
@@ -59,71 +61,90 @@ export const deleteBookData = createAsyncThunk(
 //slice manage
 const BookSlice = createSlice({
     name: "book",
-    initialState: initialState,
+    initialState: {
+        books : initialState,
+        loading: false,
+    },
     reducers: {
         saveBook:(state,action)=>{
-            state.push(action.payload)
+            state.books.push(action.payload)
+
         },
         updateBook:(state, action )=>{
             const updateBooks = action.payload
-            const index = state.findIndex((book) =>book.id  === updateBooks.id);
+            const index = state.books.findIndex((book) =>book.id  === updateBooks.id);
             if (index !== -1) {
-                state[index] = { ...state[index], ...updateBooks };
+                state.books[index] = { ...state.books[index], ...updateBooks };
             }
         },
         deleteBook: (state, action) => {
-            return state.filter(book => book.id !== action.payload);
+            state.books.filter(book => book.id !== action.payload);
+            return state
         },
     },
     extraReducers:(builder)=>{
         builder
             .addCase(addBookData.fulfilled,(state, action)=>{
-                state.push(action.payload)
+                state.books.push(action.payload)
+                state.loading = false
                 console.log("book save fulfilled")
             })
             .addCase(addBookData.pending,(state, action)=>{
                 console.log("Pending");
+                setTimeout(() => {
+                    state.loading = true;
+                }, 2000);
             })
             .addCase(addBookData.rejected,(state, action)=>{
                 console.log("Failed to save book: ",action.payload);
+                state.loading = false
             });
         builder
             .addCase(getBooksData.fulfilled,(state, action)=>{
                 console.log("books get fulfilled");
-                state = action.payload;
+                state.loading = false
+                state.books = action.payload;
                 return state;
             })
             .addCase(getBooksData.pending,(state, action)=>{
                 console.log("Pending");
+                state.loading = true
             })
             .addCase(getBooksData.rejected,(state, action)=>{
                 console.log("Failed to get book: ",action.payload);
+                state.loading = false
             });
         builder
             .addCase(updateBookData.fulfilled,(state, action)=>{
                 console.log("book update fulfilled")
-                return state.map((book:Book)=>(
+                state.loading = false
+                state.books.map((book:Book)=>(
                     book.id==action.payload.id ? {...book,title : action.payload.title, author : action.payload.author,price:action.payload.price,description:action.payload.description,
                         category:action.payload.category,image:action.payload.image,stock:action.payload.stock} : book
                 ))
+                return state
             })
             .addCase(updateBookData.pending,(state, action)=>{
                 console.log("Pending");
+                state.loading = true
             })
             .addCase(updateBookData.rejected,(state, action)=>{
                 console.log("Failed to update book: ",action.payload);
+                state.loading = false
             });
         builder
             .addCase(deleteBookData.fulfilled,(state, action)=>{
                 console.log("fulfilled");
-                state = state.filter((book:Book) => book.id !== action.payload.id);
+                state.books = state.books.filter((book:Book) => book.id !== action.payload.id);
+                state.loading = false
                 return state
             })
             .addCase(deleteBookData.pending,(state, action)=>{
-                console.log("Pending");
+                state.loading = true
             })
             .addCase(deleteBookData.rejected,(state, action)=>{
                 console.log("Failed to delete book: ",action.payload);
+                state.loading = false
             });
     }
 })

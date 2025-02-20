@@ -6,12 +6,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {deleteBookData, getBooksData} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
+import {LoadingAnimation} from "../component/LoadingAnimation.tsx";
 
 export function Books() {
     const [editingBook, setEditingBook] = useState<string | null  >(null);
     const [searchText,setSearchText] = useState('');
     const dispatch = useDispatch<AppDispatch>();
-    const books:Book[] = useSelector((state:RootState) => state.bookData);
+    const books:Book[] = useSelector((state:RootState) => state.bookData.books);
+    const loading: boolean = useSelector((state:RootState) => state.bookData.loading);
     useEffect(() => {
         dispatch(getBooksData());
     }, [dispatch]);
@@ -22,6 +24,7 @@ export function Books() {
     }
     return (
         <div className="p-6">
+            {loading && <LoadingAnimation/>}
             <div className="flex justify-between items-center mb-6">
                 <SearchBar setText={setSearchText}></SearchBar>
                 <button
