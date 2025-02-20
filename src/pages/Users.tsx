@@ -4,7 +4,7 @@ import {Pencil, Trash2} from "lucide-react";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {User} from "../interface/User.ts";
-import {deleteUser, deleteUserData, getUsersData} from "../Slices/UserSlice.ts";
+import {deleteUserData, getUsersData} from "../Slices/UserSlice.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Users() {
@@ -17,9 +17,11 @@ export function Users() {
     useEffect(() => {
         dispatch(getUsersData());
     }, [dispatch]);
-    /*const users = [
-        {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
-    ]*/
+    if (searchText !== '') {
+        const user = users.filter(user => user.email.toLowerCase().includes(searchText.toLowerCase()));
+        setEditingUser(user[0].id);
+        setSearchText('');
+    }
     return (
         <div className="p-6">
             <div className="flex justify-between items-center mb-6">
