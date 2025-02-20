@@ -1,8 +1,8 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useState} from "react";
 import {Order} from "../interface/Order.ts";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {getOrdersData, updateOrder, updateOrderData} from "../Slices/OrderSlice.ts";
+import {getOrdersData, updateOrderData} from "../Slices/OrderSlice.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Orders() {
@@ -15,20 +15,58 @@ export function Orders() {
     useEffect(() => {
         dispatch(getOrdersData());
     }, [dispatch]);
+    const [filteredOrders, setFilteredOrders] = useState<Order[]>(orders);
 
-    const filteredOrders = useMemo(() => {
+    useEffect(() => {
+        let updatedOrders = orders;
+
+        // Filter for pending orders
+        if (showPendingOnly) {
+            updatedOrders = orders.filter(order => order.status === "pending");
+        }
+
+        // search filter
+        if (searchText.trim() !== '') {
+            const searchResult = updatedOrders.filter(order =>
+                order.id.toLowerCase().includes(searchText.toLowerCase())
+            );
+
+            if (searchResult.length > 0) {
+                setFilteredOrders(searchResult);
+            } else {
+                setSearchText('Order Not Found');
+            }
+        } else {
+            setFilteredOrders(updatedOrders);
+        }
+    }, [orders, showPendingOnly, searchText]);
+    /*const filteredOrders = useMemo(() => {
         return showPendingOnly ? orders.filter((order) => order.status === "pending") : orders
-    }, [orders, showPendingOnly])
+    }, [orders, showPendingOnly])*/
+
 
     const updateOrderStatus = (orderId: string, newStatus: "pending" | "complete") => {
         dispatch(updateOrderData({ orderId, status: newStatus }));
+    }
+    /*if (searchText !== '') {
+        const order = orders.filter(order => order.id.toLowerCase().includes(searchText.toLowerCase()));
+        if (order.length > 0) {
+            filteredOrders(order);
+            setSearchText('');
+        } else {
+            setSearchText('Order Not Found');
+        }
+    }*/
+    function handelOnShowBtn() {
+        setShowPendingOnly(!showPendingOnly)
+        setSearchText('')
     }
     return (
         <div className="container mx-auto p-4">
             <SearchBar setText={setSearchText}/>
             <div className="mb-4">
                 <button
-                    onClick={() => setShowPendingOnly(!showPendingOnly)}
+                    onClick={handelOnShowBtn}
                     className={`px-4 py-2 rounded hover:cursor-pointer ${showPendingOnly ? "bg-black border-2 text-white hover:bg-gray-300 hover:text-black" : "bg-gray-200 text-gray-800 hover:bg-gray-300"}`}
                 >
                     {showPendingOnly ? "Showing Pending Orders" : "Show All Orders"}
