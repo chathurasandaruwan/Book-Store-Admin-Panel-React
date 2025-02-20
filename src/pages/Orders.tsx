@@ -1,15 +1,20 @@
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
 import {Order} from "../interface/Order.ts";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
-import {updateOrder} from "../Slices/OrderSlice.ts";
-import {RootState} from "../store/Store.ts";
+import {getOrdersData, updateOrder} from "../Slices/OrderSlice.ts";
+import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Orders() {
     const orders :Order[] = useSelector((state:RootState) => state.orderData)
-    const dispatch = useDispatch();
     const [showPendingOnly, setShowPendingOnly] = useState(false)
     const [searchText,setSearchText] = useState('');
+
+    const dispatch  = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(getOrdersData());
+    }, [dispatch]);
 
     const filteredOrders = useMemo(() => {
         return showPendingOnly ? orders.filter((order) => order.status === "pending") : orders
@@ -45,17 +50,10 @@ export function Orders() {
                     </thead>
                     <tbody>
                     {filteredOrders.map((order) => (
-                        <tr key={order.orderId} className="border-b">
-                            <td className="px-4 py-2">{order.orderId}</td>
-                            <td className="px-4 py-2">{order.userId}</td>
+                        <tr key={order.id} className="border-b">
+                            <td className="px-4 py-2">{order.id}</td>
+                            <td className="px-4 py-2">{order.user_id}</td>
                             <td className="px-4 py-2">
-                                {/*{order.books.map((book, index) => (
-                                    <div key={index}>
-                                        <p>Book ID: {book.bookId}</p>
-                                        <p>Quantity: {book.quantity}</p>
-                                        <p>Price: ${book.price.toFixed(2)}</p>
-                                    </div>
-                                ))}*/}
                                 <details className="cursor-pointer">
                                     <summary className="font-semibold text-gray-800">View Books</summary>
                                     <div className="mt-2 p-2 border rounded bg-gray-100">
@@ -70,7 +68,7 @@ export function Orders() {
                                 </details>
                             </td>
 
-                            <td className="px-4 py-2">{order.orderDate}</td>
+                            <td className="px-4 py-2">{order.date.toString().split("T")[0]}</td>
                             <td className="px-4 py-2">
                                 {order.books.reduce((total, book) => total + book.quantity, 0)}
                             </td>
@@ -85,7 +83,7 @@ export function Orders() {
                             <td className="px-4 py-2">
                                 <button
                                     onClick={() =>
-                                        updateOrderStatus(order.orderId, order.status === "pending" ? "complete" : "pending")
+                                        updateOrderStatus(order.id, order.status === "pending" ? "complete" : "pending")
                                     }
                                     className="bg-gray-500 hover:bg-gray-800 text-white font-bold py-1 px-2 rounded hover:cursor-pointer"
                                 >

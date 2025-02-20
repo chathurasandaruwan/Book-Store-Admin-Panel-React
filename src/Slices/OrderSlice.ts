@@ -1,36 +1,25 @@
 import {Order} from "../interface/Order.ts";
-import {createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import axios from "axios";
 
-const initialState : Order[] = [
-    {
-        orderId: "ORD001",
-        userId: "USR001",
-        orderDate: "2023-05-15",
-        status: "pending",
-        books: [
-            { bookId: "BK001", quantity: 2, price: 29.99 },
-            { bookId: "BK002", quantity: 2, price: 29.99 }
-        ]
-    },
-    {
-        orderId: "ORD002",
-        userId: "USR002",
-        orderDate: "2023-05-16",
-        status: "complete",
-        books: [
-            { bookId: "BK003", quantity: 1, price: 19.99 }
-        ]
-    },
-    {
-        orderId: "ORD003",
-        userId: "USR003",
-        orderDate: "2023-05-17",
-        status: "pending",
-        books: [
-            { bookId: "BK002", quantity: 3, price: 39.99 }
-        ]
+const initialState : Order[] = [];
+
+const api = axios.create({
+    baseURL : "http://localhost:3000/order"
+});
+
+// get All orders
+export const getOrdersData = createAsyncThunk(
+    'order/getOrder',
+    async ()=>{
+        try {
+            const response = await api.get('/all');
+            return response.data;
+        }catch (error) {
+            return console.log('error',error)
+        }
     }
-];
+)
 
 const OrderSlice = createSlice({
     name:"order",
@@ -42,6 +31,20 @@ const OrderSlice = createSlice({
                 orderToUpdate.status = status
             }
         }
+    },
+    extraReducers:(builder)=>{
+        builder
+            .addCase(getOrdersData.fulfilled,(state,action)=>{
+                console.log('order get fulfilled')
+                state = action.payload;
+                return state;
+            })
+            .addCase(getOrdersData.pending,(state,action)=>{
+                console.log("Pending");
+            })
+            .addCase(getOrdersData.rejected,(state,action)=>{
+                console.log("Failed to get order: ",action.payload);
+            });
     }
 })
 export const {updateOrder}=OrderSlice.actions

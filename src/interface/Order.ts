@@ -6,9 +6,9 @@ export interface Order {
     quantity: number
     price: number
     status: "pending" | "complete"*/
-    orderId: string;
-    userId: string;
-    orderDate: string;
+    id: string;
+    user_id: string;
+    date: string;
     status: "pending" | "complete";
     books: {
         bookId: string;
