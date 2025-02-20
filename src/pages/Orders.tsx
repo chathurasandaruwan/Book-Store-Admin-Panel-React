@@ -35,10 +35,10 @@ export function Orders() {
                     <tr>
                         <th className="px-4 py-2 text-left">Order ID</th>
                         <th className="px-4 py-2 text-left">User ID</th>
-                        <th className="px-4 py-2 text-left">Book ID</th>
+                        <th className="px-4 py-2 text-left">Book Details</th>
                         <th className="px-4 py-2 text-left">Order Date</th>
-                        <th className="px-4 py-2 text-left">Quantity</th>
-                        <th className="px-4 py-2 text-left">Price</th>
+                        <th className="px-4 py-2 text-left">TOT Quantity</th>
+                        <th className="px-4 py-2 text-left">TOT Price</th>
                         <th className="px-4 py-2 text-left">Status</th>
                         <th className="px-4 py-2 text-left">Actions</th>
                     </tr>
@@ -48,10 +48,33 @@ export function Orders() {
                         <tr key={order.orderId} className="border-b">
                             <td className="px-4 py-2">{order.orderId}</td>
                             <td className="px-4 py-2">{order.userId}</td>
-                            <td className="px-4 py-2">{order.bookId}</td>
+                            <td className="px-4 py-2">
+                                {/*{order.books.map((book, index) => (
+                                    <div key={index}>
+                                        <p>Book ID: {book.bookId}</p>
+                                        <p>Quantity: {book.quantity}</p>
+                                        <p>Price: ${book.price.toFixed(2)}</p>
+                                    </div>
+                                ))}*/}
+                                <details className="cursor-pointer">
+                                    <summary className="font-semibold text-gray-800">View Books</summary>
+                                    <div className="mt-2 p-2 border rounded bg-gray-100">
+                                        {order.books.map((book, index) => (
+                                            <div key={index} className="mb-2">
+                                                <p><strong>Book ID:</strong> {book.bookId}</p>
+                                                <p><strong>Quantity:</strong> {book.quantity}</p>
+                                                <p><strong>Price:</strong> ${book.price.toFixed(2)}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </details>
+                            </td>
+
                             <td className="px-4 py-2">{order.orderDate}</td>
-                            <td className="px-4 py-2">{order.quantity}</td>
-                            <td className="px-4 py-2">${order.price.toFixed(2)}</td>
+                            <td className="px-4 py-2">
+                                {order.books.reduce((total, book) => total + book.quantity, 0)}
+                            </td>
+                            <td className="px-4 py-2">${order.books.reduce((total, book) => total + book.price * book.quantity, 0).toFixed(2)}</td>
                             <td className="px-4 py-2">
                   <span
                       className={`px-2 py-1 rounded ${order.status === "pending" ? "bg-yellow-200" : "bg-green-200"}`}
