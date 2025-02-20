@@ -76,6 +76,7 @@ const UserSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(saveUserData.fulfilled, (state, action) => {
+                console.log('user save fulfilled')
                 state.push(action.payload);
             })
             .addCase(saveUserData.pending, (state, action) => {
@@ -85,6 +86,7 @@ const UserSlice = createSlice({
                 console.log("Failed to save user: ", action.payload);
             })
             .addCase(getUsersData.fulfilled, (state, action) => {
+                console.log('user get fulfilled')
                 state = action.payload;
                 return state;
             })
@@ -95,14 +97,22 @@ const UserSlice = createSlice({
                 console.log("Failed to get user: ", action.payload);
             })
             .addCase(updateUserData.fulfilled, (state, action) => {
+                console.log('user update fulfilled')
                 const updateUser = action.payload;
                 const index = state.findIndex((user) => user.id === updateUser.id);
                 if (index !== -1) {
                     state[index] = { ...state[index], ...updateUser };
                 }
             })
+            .addCase(updateUserData.pending, (state, action) => {
+                console.log("Pending");
+            })
+            .addCase(updateUserData.rejected, (state, action) => {
+                console.log("Failed to update user: ", action.payload);
+            })
             .addCase(deleteUserData.fulfilled, (state, action) => {
-                return state.filter(user => user.id !== action.payload);
+                console.log('user delete fulfilled')
+                return state.filter(user => user.id !== action.payload.id);
             })
             .addCase(deleteUserData.pending, (state, action) => {
                 console.log("Pending");

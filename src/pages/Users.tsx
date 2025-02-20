@@ -1,18 +1,22 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {UserForm} from "../component/UserForm.tsx";
 import {Pencil, Trash2} from "lucide-react";
 import {SearchBar} from "../component/SearchBar.tsx";
 import {useDispatch, useSelector} from "react-redux";
 import {User} from "../interface/User.ts";
-import {deleteUser} from "../Slices/UserSlice.ts";
-import {RootState} from "../store/Store.ts";
+import {deleteUser, deleteUserData, getUsersData} from "../Slices/UserSlice.ts";
+import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Users() {
-    const [editingUser, setEditingUser] = useState<number | null>(null);
+    const [editingUser, setEditingUser] = useState<string | null>(null);
     const [searchText,setSearchText] = useState('');
 
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     const users: User[] = useSelector((state:RootState) => state.userData);
+
+    useEffect(() => {
+        dispatch(getUsersData());
+    }, [dispatch]);
     /*const users = [
         {id:1 , name: 'chathura',email: 'chathura@123', role: 'admin',status: 'active'  }
     ]*/
@@ -21,7 +25,7 @@ export function Users() {
             <div className="flex justify-between items-center mb-6">
                 <SearchBar setText={setSearchText}></SearchBar>
                 <button
-                    onClick={() => setEditingUser(0)}
+                    onClick={() => setEditingUser('new')}
                     className="bg-black text-white px-4 py-2 border-2 rounded hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                 >
                     Add New User
@@ -67,7 +71,7 @@ export function Users() {
                                         <Pencil size={20}/>
                                     </button>
                                     <button
-                                        onClick={() => dispatch(deleteUser(user.id))}
+                                        onClick={() => dispatch(deleteUserData(user.id))}
                                         className="p-2 hover:bg-gray-100 rounded text-red-600 hover:cursor-pointer"
                                     >
                                         <Trash2 size={20}/>

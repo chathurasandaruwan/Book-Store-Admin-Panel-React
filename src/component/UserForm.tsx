@@ -1,21 +1,24 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {saveUser, updateUser} from "../Slices/UserSlice.ts";
+import {saveUser, saveUserData, updateUser, updateUserData} from "../Slices/UserSlice.ts";
 import {User} from "../interface/User.ts";
+import {AppDispatch, RootState} from "../store/Store.ts";
 
 interface UserFormProps {
-    userId: number;
+    userId: string;
     onClose: () => void;
 }
 export function UserForm({userId, onClose}: UserFormProps) {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<User>({
+        id:'',
         name: '',
         email: '',
+        password: '',
         role: 'user',
         status: 'active',});
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
     // Use select to update the form
-    const existingUser = useSelector((state) => state.userData.find((user:User) => user.id === userId));
+    const existingUser = useSelector((state:RootState) => state.userData.find((user:User) => user.id === userId));
     useEffect(() => {
         if (existingUser) {
             setFormData(existingUser);
@@ -23,12 +26,12 @@ export function UserForm({userId, onClose}: UserFormProps) {
     }, [existingUser]);
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (userId === 0) {
+        if (userId === 'new') {
             // add new user
-            dispatch(saveUser({ ...formData, id: Date.now()}))
+            dispatch(saveUserData({ ...formData, id: 'newId' }));
         } else {
             // update user
-            dispatch(updateUser({ ...formData, id: userId }));
+            dispatch(updateUserData({user:formData, id: userId }));
         }
         onClose();
     };
@@ -37,7 +40,7 @@ export function UserForm({userId, onClose}: UserFormProps) {
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
                 <div className=" relative flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">
-                        {userId === 0 ? 'Add New User' : 'Edit User'}
+                        {userId === 'new' ? 'Add New User' : 'Edit User'}
                     </h2>
                     <button
                         onClick={onClose}
@@ -165,6 +168,17 @@ export function UserForm({userId, onClose}: UserFormProps) {
                     </div>
 
                     <div>
+                        <label className="block text-sm font-medium mb-1">Password</label>
+                        <input
+                            type="password"
+                            value={formData.password}
+                            onChange={e => setFormData({...formData, password: e.target.value})}
+                            className="w-full border rounded p-2"
+                            required
+                        />
+                    </div>
+
+                    <div>
                         <label className="block text-sm font-medium mb-1">Role</label>
                         <select
                             value={formData.role}
@@ -200,7 +214,7 @@ export function UserForm({userId, onClose}: UserFormProps) {
                             type="submit"
                             className="px-4 py-2 bg-black text-white rounded border-2 hover:bg-gray-300 hover:text-black hover:cursor-pointer"
                         >
-                            {userId === 0 ? 'Add User' : 'Update User'}
+                            {userId === 'new' ? 'Add User' : 'Update User'}
                         </button>
                     </div>
                 </form>
