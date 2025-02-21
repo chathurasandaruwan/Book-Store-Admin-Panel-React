@@ -6,7 +6,7 @@ import {getOrdersData, updateOrderData} from "../Slices/OrderSlice.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
 
 export function Orders() {
-    const orders :Order[] = useSelector((state:RootState) => state.orderData)
+    const orders :Order[] = useSelector((state:RootState) => state.orderData.orders)
     const [showPendingOnly, setShowPendingOnly] = useState(false)
     const [searchText,setSearchText] = useState('');
 

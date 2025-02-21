@@ -12,10 +12,11 @@ export function RootLayout() {
     const location = useLocation()
     const isLoadingBook: boolean = useSelector((state:RootState) => state.bookData.loading);
     const isLoadingUser: boolean = useSelector((state:RootState) => state.userData.loading);
+    const isLoadingOrder: boolean = useSelector((state:RootState) => state.orderData.loading);
 
     useEffect(() => {
-        setLoading(isLoadingBook || isLoadingUser);
-    }, [isLoadingBook, isLoadingUser]);
+        setLoading(isLoadingBook || isLoadingUser || isLoadingOrder);
+    }, [isLoadingBook, isLoadingUser, isLoadingOrder]);
 
     const routeTitles: any = {
         "/": "Dashboard",
