@@ -12,7 +12,7 @@ export function Users() {
     const [searchText,setSearchText] = useState('');
 
     const dispatch = useDispatch<AppDispatch>();
-    const users: User[] = useSelector((state:RootState) => state.userData);
+    const users: User[] = useSelector((state:RootState) => state.userData.users);
 
     useEffect(() => {
         dispatch(getUsersData());

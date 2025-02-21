@@ -18,7 +18,7 @@ export function UserForm({userId, onClose}: UserFormProps) {
         status: 'active',});
     const dispatch = useDispatch<AppDispatch>();
     // Use select to update the form
-    const existingUser = useSelector((state:RootState) => state.userData.find((user:User) => user.id === userId));
+    const existingUser = useSelector((state:RootState) => state.userData.users.find((user:User) => user.id === userId));
     useEffect(() => {
         if (existingUser) {
             setFormData(existingUser);

@@ -41,6 +41,7 @@ export const getBooksData = createAsyncThunk(
 export const updateBookData = createAsyncThunk(
     'book/updateBook',
     async ({ id, book }: { id: string; book: Book },{ rejectWithValue }) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.put('/update/'+id, book);
             return response.data;
@@ -53,6 +54,7 @@ export const updateBookData = createAsyncThunk(
 export const deleteBookData = createAsyncThunk(
     'book/deleteBook',
     async (id:string,{ rejectWithValue }) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             await new Promise((resolve) => setTimeout(resolve, 1000));
             const response = await api.delete('/delete/'+id);

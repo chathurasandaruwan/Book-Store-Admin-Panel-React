@@ -12,11 +12,13 @@ const api = axios.create({
 export const saveUserData = createAsyncThunk(
     'user/saveUser',
     async (user : User,{ rejectWithValue })=>{
+        //set delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.post('/add',user);
             return response.data;
-        }catch (error) {
-            return console.log('error',error)
+        }catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
         }
     }
 )
@@ -24,11 +26,13 @@ export const saveUserData = createAsyncThunk(
 export const getUsersData = createAsyncThunk(
     'user/getUser',
     async (arg,{ rejectWithValue })=>{
+        //set delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.get('/all');
             return response.data;
-        }catch (error) {
-            return console.log('error',error)
+        }catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
         }
     }
 )
@@ -36,22 +40,26 @@ export const getUsersData = createAsyncThunk(
 export const updateUserData = createAsyncThunk(
     'user/updateUser',
     async ({ id, user }: { id: string; user: User },{ rejectWithValue }) => {
+        //set delay
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.put('/update/'+id,user);
             return response.data;
-        }catch (error) {
-            return console.log('error',error)
-    }   }
+        }catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
+        }
+    }
 )
 // delete User
 export const deleteUserData = createAsyncThunk(
     'user/deleteUser',
     async (id:string,{ rejectWithValue }) => {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.delete('/delete/'+id);
             return response.data;
-        } catch (error) {
-            return console.log('error',error)
+        } catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
         }
     }
 )
@@ -84,7 +92,7 @@ const UserSlice = createSlice({
                 state.loading = false
                 state.users.push(action.payload);
             })
-            .addCase(saveUserData.pending, (state, action) => {
+            .addCase(saveUserData.pending, (state) => {
                 state.loading = true
             })
             .addCase(saveUserData.rejected, (state, action) => {
@@ -97,7 +105,7 @@ const UserSlice = createSlice({
                 state.users = action.payload;
                 return state;
             })
-            .addCase(getUsersData.pending, (state, action) => {
+            .addCase(getUsersData.pending, (state) => {
                 state.loading = true
             })
             .addCase(getUsersData.rejected, (state, action) => {
@@ -113,7 +121,7 @@ const UserSlice = createSlice({
                     state.users[index] = { ...state.users[index], ...updateUser };
                 }
             })
-            .addCase(updateUserData.pending, (state, action) => {
+            .addCase(updateUserData.pending, (state) => {
                 state.loading = true
             })
             .addCase(updateUserData.rejected, (state, action) => {
@@ -126,7 +134,7 @@ const UserSlice = createSlice({
                 state.users = state.users.filter(user => user.id !== action.payload.id);
                 return state
             })
-            .addCase(deleteUserData.pending, (state, action) => {
+            .addCase(deleteUserData.pending, (state) => {
                 state.loading = true
             })
             .addCase(deleteUserData.rejected, (state, action) => {

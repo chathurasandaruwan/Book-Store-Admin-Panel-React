@@ -15,7 +15,7 @@ export function Dashboard() {
         dispatch(getBooksData());
     }, [dispatch]);
     const books:Book[] = useSelector((state:RootState) => state.bookData.books);
-    const users:User[] = useSelector((state:RootState) => state.userData);
+    const users:User[] = useSelector((state:RootState) => state.userData.users);
 
     const totalBooks = books.length;
     const totalUsers = users.length;

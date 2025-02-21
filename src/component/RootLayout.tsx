@@ -5,10 +5,17 @@ import { ToastContainer } from "react-toastify";
 import {LoadingAnimation} from "./LoadingAnimation.tsx";
 import {useSelector} from "react-redux";
 import {RootState} from "../store/Store.ts";
+import {useEffect, useState} from "react";
 
 export function RootLayout() {
+    const [loading,setLoading] = useState(false);
     const location = useLocation()
-    const loading: boolean = useSelector((state:RootState) => state.bookData.loading);
+    const isLoadingBook: boolean = useSelector((state:RootState) => state.bookData.loading);
+    const isLoadingUser: boolean = useSelector((state:RootState) => state.userData.loading);
+
+    useEffect(() => {
+        setLoading(isLoadingBook || isLoadingUser);
+    }, [isLoadingBook, isLoadingUser]);
 
     const routeTitles: any = {
         "/": "Dashboard",
