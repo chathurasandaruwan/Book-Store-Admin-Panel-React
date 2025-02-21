@@ -15,7 +15,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [tempImgUrl,setTempImgUrl] = useState('');
     const dispatch = useDispatch<AppDispatch>();
-    const existingBook = useSelector((state:RootState) => state.bookData.find((book:Book) => book.id === bookId));
+    const existingBook = useSelector((state:RootState) => state.bookData.books.find((book:Book) => book.id === bookId));
 //load update form
     useEffect(() => {
         if (existingBook) {
@@ -56,6 +56,7 @@ export function BookForm({bookId, onClose}: BookFormProps) {
 
     return (
         <div className="fixed h-screen inset-0 glass-effect flex items-center justify-center z-60">
+            {/*{loading && <LoadingAnimation/>}*/}
             <div className="bg-white rounded-lg p-6 w-full max-w-2xl">
                 <div className="relative flex justify-between items-center mb-4">
                     <h2 className="text-2xl font-bold">

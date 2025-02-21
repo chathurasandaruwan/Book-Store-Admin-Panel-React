@@ -6,14 +6,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {deleteBookData, getBooksData} from "../Slices/BookSlice.ts";
 import {Book} from "../interface/Book.ts";
 import {AppDispatch, RootState} from "../store/Store.ts";
-import {LoadingAnimation} from "../component/LoadingAnimation.tsx";
+import { toast} from "react-toastify";
 
 export function Books() {
     const [editingBook, setEditingBook] = useState<string | null  >(null);
     const [searchText,setSearchText] = useState('');
     const dispatch = useDispatch<AppDispatch>();
     const books:Book[] = useSelector((state:RootState) => state.bookData.books);
-    const loading: boolean = useSelector((state:RootState) => state.bookData.loading);
+    // const loading: boolean = useSelector((state:RootState) => state.bookData.loading);
     useEffect(() => {
         dispatch(getBooksData());
     }, [dispatch]);
@@ -22,9 +22,19 @@ export function Books() {
         setEditingBook(book[0].id);
         setSearchText('');
     }
+    //delete book
+    function handleDelete(id: string) {
+        const confirmDelete = window.confirm("Are you sure you want to delete this book?");
+        if (confirmDelete) {
+            dispatch(deleteBookData(id));
+        } else {
+            toast.info("Book deletion canceled.");
+        }
+    }
+
     return (
         <div className="p-6">
-            {loading && <LoadingAnimation/>}
+            {/*{loading && <LoadingAnimation/>}*/}
             <div className="flex justify-between items-center mb-6">
                 <SearchBar setText={setSearchText}></SearchBar>
                 <button
@@ -55,7 +65,7 @@ export function Books() {
                                 <Pencil size={20}/>
                             </button>
                             <button
-                                onClick={() => dispatch(deleteBookData(book.id))}
+                                onClick={()=>handleDelete(book.id)}
                                 className="p-2 hover:bg-gray-100 rounded text-red-600 hover:cursor-pointer"
                             >
                                 <Trash2 size={20}/>

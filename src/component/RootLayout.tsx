@@ -1,9 +1,14 @@
 import { Outlet } from "react-router"
 import { useLocation } from "react-router"
 import {MenuBar} from "./MenuBar.tsx";
+import { ToastContainer } from "react-toastify";
+import {LoadingAnimation} from "./LoadingAnimation.tsx";
+import {useSelector} from "react-redux";
+import {RootState} from "../store/Store.ts";
 
 export function RootLayout() {
     const location = useLocation()
+    const loading: boolean = useSelector((state:RootState) => state.bookData.loading);
 
     const routeTitles: any = {
         "/": "Dashboard",
@@ -22,6 +27,8 @@ export function RootLayout() {
                     <h1 className="text-xl font-semibold">{title}</h1>
                 </header>
                 <main className="p-4 flex-1">
+                    <ToastContainer />
+                    {loading && <LoadingAnimation/>}
                     <Outlet />
                 </main>
             </div>
