@@ -117,13 +117,36 @@ export function BookForm({bookId, onClose}: BookFormProps) {
 
                     <div>
                         <label className="block text-sm font-medium mb-1">Category</label>
-                        <input
+                       {/* <input
                             type="text"
                             value={formData.category}
                             onChange={e => setFormData({...formData, category: e.target.value})}
                             className="w-full border rounded p-2"
                             required
-                        />
+                        />*/}
+                        <select
+                            value={formData.category}
+                            onChange={e => setFormData({...formData, category: e.target.value})}
+                            className="w-full border rounded p-2"
+                            required
+                        >
+                            <option value="" hidden disabled>Select Category</option>
+                            <option value="Educational & Academic">Educational & Academic</option>
+                            <option value="Children's Books">Children's Books</option>
+                            <option value="History & Archaeology">History & Archaeology</option>
+                            <option value="Science & Technology">Science & Technology</option>
+                            <option value="Biographies & Memoirs">Biographies & Memoirs</option>
+                            <option value="Business & Economics">Business & Economics</option>
+                            <option value="Health & Wellness">Health & Wellness</option>
+                            <option value="Art & Photography">Art & Photography</option>
+                            <option value="Travel & Adventure">Travel & Adventure</option>
+                            <option value="Law & Politics">Law & Politics</option>
+                            <option value="Cookbooks & Food">Cookbooks & Food</option>
+                            <option value="Sports & Fitness">Sports & Fitness</option>
+                            <option value="Comics & Graphic Novels">Comics & Graphic Novels</option>
+                            <option value="Magazines & Journals">Magazines & Journals</option>
+                            <option value="Fiction">Fiction</option>
+                        </select>
                     </div>
 
                     <div>
