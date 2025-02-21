@@ -1,6 +1,7 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {User} from "../interface/User.ts";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 
 const initialState : User[] = []
@@ -88,7 +89,7 @@ const UserSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(saveUserData.fulfilled, (state, action) => {
-                console.log('user save fulfilled')
+                toast.success("User added successfully!");
                 state.loading = false
                 state.users.push(action.payload);
             })
@@ -96,11 +97,10 @@ const UserSlice = createSlice({
                 state.loading = true
             })
             .addCase(saveUserData.rejected, (state, action) => {
-                console.log("Failed to save user: ", action.payload);
+                toast.error(`Failed to save User: ${action.payload}`);
                 state.loading = false
             })
             .addCase(getUsersData.fulfilled, (state, action) => {
-                console.log('user get fulfilled')
                 state.loading = false
                 state.users = action.payload;
                 return state;
@@ -109,11 +109,11 @@ const UserSlice = createSlice({
                 state.loading = true
             })
             .addCase(getUsersData.rejected, (state, action) => {
-                console.log("Failed to get user: ", action.payload);
+                toast.error(`Failed to get User: ${action.payload}`);
                 state.loading = false
             })
             .addCase(updateUserData.fulfilled, (state, action) => {
-                console.log('user update fulfilled')
+                toast.success("User updated successfully!");
                 state.loading = false
                 const updateUser = action.payload;
                 const index = state.users.findIndex((user) => user.id === updateUser.id);
@@ -125,11 +125,11 @@ const UserSlice = createSlice({
                 state.loading = true
             })
             .addCase(updateUserData.rejected, (state, action) => {
-                console.log("Failed to update user: ", action.payload);
+                toast.error(`Failed to update User: ${action.payload}`);
                 state.loading = false
             })
             .addCase(deleteUserData.fulfilled, (state, action) => {
-                console.log('user delete fulfilled')
+                toast.success("User deleted successfully!");
                 state.loading = false
                 state.users = state.users.filter(user => user.id !== action.payload.id);
                 return state
@@ -138,7 +138,7 @@ const UserSlice = createSlice({
                 state.loading = true
             })
             .addCase(deleteUserData.rejected, (state, action) => {
-                console.log("Failed to delete user: ", action.payload);
+                toast.error(`Failed to delete User: ${action.payload}`);
                 state.loading = false
             });
     },
