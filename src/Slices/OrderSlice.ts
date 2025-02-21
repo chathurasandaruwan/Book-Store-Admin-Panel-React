@@ -1,6 +1,7 @@
 import {Order} from "../interface/Order.ts";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
+import {toast} from "react-toastify";
 
 const initialState : Order[] = [];
 
@@ -11,25 +12,25 @@ const api = axios.create({
 // get All orders
 export const getOrdersData = createAsyncThunk(
     'order/getOrder',
-    async ()=>{
+    async (arg,{ rejectWithValue })=>{
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.get('/all');
             return response.data;
-        }catch (error) {
-            return console.log('error',error)
+        }catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
         }
     }
 )
 export const updateOrderData = createAsyncThunk(
     'order/updateOrder',
-    async ({orderId,status}:{orderId:string,status:"pending" | "complete"})=>{
+    async ({orderId,status}:{orderId:string,status:"pending" | "complete"},{ rejectWithValue })=>{
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             const response = await api.put('/update/'+orderId,{status:status});
             return response.data;
-        }catch (error) {
-            return console.log('error',error)
+        }catch (error:any) {
+            return rejectWithValue(error.response?.data || "Something went wrong");
         }
     }
 )
@@ -51,7 +52,6 @@ const OrderSlice = createSlice({
     extraReducers:(builder)=>{
         builder
             .addCase(getOrdersData.fulfilled,(state,action)=>{
-                console.log('order get fulfilled')
                 state.loading = false
                 state.orders = action.payload;
                 return state;
@@ -60,12 +60,12 @@ const OrderSlice = createSlice({
                 state.loading = true
             })
             .addCase(getOrdersData.rejected,(state,action)=>{
-                console.log("Failed to get order: ",action.payload);
+                toast.error(`Failed to get Orders: ${action.payload}`);
                 state.loading = false
             });
         builder
             .addCase(updateOrderData.fulfilled,(state,action)=>{
-                console.log('order update fulfilled')
+                toast.success("Order updated successfully!");
                 state.loading = false
                 const orderToUpdate = state.orders.find((order) => order.id === action.payload.id)
                 if (orderToUpdate) {
@@ -76,7 +76,7 @@ const OrderSlice = createSlice({
                 state.loading = true
             })
             .addCase(updateOrderData.rejected,(state,action)=>{
-                console.log("Failed to update order: ",action.payload);
+                toast.error(`Failed to update order: ${action.payload}`);
                 state.loading = false
             });
     }
