@@ -19,7 +19,7 @@ export function RootLayout() {
     }, [isLoadingBook, isLoadingUser, isLoadingOrder]);
 
     const routeTitles: any = {
-        "/": "Dashboard",
+        "/dashboard": "Dashboard",
         "/books": "Books Management",
         "/users": "Users Management",
         "/orders": "Order Details",

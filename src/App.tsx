@@ -9,12 +9,12 @@ import {SignInForm} from "./component/SignInForm.tsx";
 
 function App() {
   const routers = createBrowserRouter([
-    { path: "/signIn", element: <SignInForm /> },
+    { path: "", element: <SignInForm /> },
       {
-      path: "",
+      path: "/",
       element: <RootLayout/>,
       children: [
-        {path: "", element: <Dashboard/>},
+        {path: "/dashboard", element: <Dashboard/>},
         {path: "/books", element: <Books/>},
         {path: "/users", element: <Users/> },
         {path: "/orders", element: <Orders/> },
