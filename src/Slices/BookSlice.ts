@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {Book} from "../interface/Book.ts";
 import axios from "axios";
 import { toast } from "react-toastify";
+import {RootState} from "../store/Store.ts";
 
 const initialState : Book[] = [];
 
@@ -12,11 +13,19 @@ const api = axios.create({
 //save book
 export const addBookData = createAsyncThunk(
     'book/saveBook',
-    async (book : Book,{ rejectWithValue })=>{
+    async (book : Book,{ rejectWithValue ,getState})=>{
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
+        // console.log('token from book',token)
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.post('/add',book);
+            const response = await api.post('/add',book,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -26,7 +35,7 @@ export const addBookData = createAsyncThunk(
 // get All books
 export const getBooksData = createAsyncThunk(
     'book/getBook',
-    async (arg,{ rejectWithValue })=>{
+    async (_,{ rejectWithValue })=>{
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
@@ -40,10 +49,17 @@ export const getBooksData = createAsyncThunk(
 //update book
 export const updateBookData = createAsyncThunk(
     'book/updateBook',
-    async ({ id, book }: { id: string; book: Book },{ rejectWithValue }) => {
+    async ({ id, book }: { id: string; book: Book },{ rejectWithValue,getState }) => {
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.put('/update/'+id, book);
+            const response = await api.put('/update/'+id, book,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         } catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -53,11 +69,18 @@ export const updateBookData = createAsyncThunk(
 //delete book
 export const deleteBookData = createAsyncThunk(
     'book/deleteBook',
-    async (id:string,{ rejectWithValue }) => {
+    async (id:string,{ rejectWithValue,getState }) => {
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            const response = await api.delete('/delete/'+id);
+            const response = await api.delete('/delete/'+id,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         } catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
