@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {User} from "../interface/User.ts";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {RootState} from "../store/Store.ts";
 
 
 const initialState : User[] = []
@@ -12,11 +13,18 @@ const api = axios.create({
 // save User
 export const saveUserData = createAsyncThunk(
     'user/saveUser',
-    async (user : User,{ rejectWithValue })=>{
+    async (user : User,{ rejectWithValue,getState })=>{
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.post('/add',user);
+            const response = await api.post('/add',user,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -26,11 +34,18 @@ export const saveUserData = createAsyncThunk(
 // get All users
 export const getUsersData = createAsyncThunk(
     'user/getUser',
-    async (_,{ rejectWithValue })=>{
+    async (_,{ rejectWithValue,getState })=>{
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.get('/all');
+            const response = await api.get('/all',{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -40,11 +55,18 @@ export const getUsersData = createAsyncThunk(
 // update User
 export const updateUserData = createAsyncThunk(
     'user/updateUser',
-    async ({ id, user }: { id: string; user: User },{ rejectWithValue }) => {
+    async ({ id, user }: { id: string; user: User },{ rejectWithValue,getState }) => {
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.put('/update/'+id,user);
+            const response = await api.put('/update/'+id,user,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -54,10 +76,17 @@ export const updateUserData = createAsyncThunk(
 // delete User
 export const deleteUserData = createAsyncThunk(
     'user/deleteUser',
-    async (id:string,{ rejectWithValue }) => {
+    async (id:string,{ rejectWithValue ,getState}) => {
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.delete('/delete/'+id);
+            const response = await api.delete('/delete/'+id,{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         } catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
