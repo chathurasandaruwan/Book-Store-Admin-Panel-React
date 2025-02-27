@@ -26,7 +26,7 @@ export const saveUserData = createAsyncThunk(
 // get All users
 export const getUsersData = createAsyncThunk(
     'user/getUser',
-    async (arg,{ rejectWithValue })=>{
+    async (_,{ rejectWithValue })=>{
         //set delay
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
@@ -70,22 +70,7 @@ const UserSlice = createSlice({
         users : initialState,
         loading: false,
     },
-    reducers: {
-        saveUser:(state,action)=>{
-            state.users.push(action.payload)
-        },
-        updateUser:(state, action )=>{
-            const updateUser = action.payload
-            const index = state.users.findIndex((user) =>user.id  === updateUser.id);
-            if (index !== -1) {
-                state.users[index] = { ...state.users[index], ...updateUser };
-            }
-        },
-        deleteUser: (state, action) => {
-            state.users.filter(user => user.id !== action.payload);
-            return state
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(saveUserData.fulfilled, (state, action) => {
@@ -143,7 +128,5 @@ const UserSlice = createSlice({
             });
     },
 })
-
-export const {saveUser,updateUser,deleteUser}=UserSlice.actions
 
 export default UserSlice.reducer

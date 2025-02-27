@@ -1,8 +1,20 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {User} from "../interface/User.ts";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../store/Store.ts";
+import {loginUser} from "../Slices/AuthSlice.ts";
+import {useNavigate} from "react-router";
 
 export function SignInForm() {
     const [signInData, setSignInData] = useState({email: "", password: ""})
+    const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
+    const isAuthenticated = useSelector((state:RootState) => state.authData.isAuthenticated);
+    useEffect(() => {
+        if(isAuthenticated){
+            navigate("/dashboard");
+        }
+    }, [isAuthenticated]);
 
     const handleChangeSignIn = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target
@@ -14,7 +26,7 @@ export function SignInForm() {
     const handleSubmitSignIn = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const user:User = {email: signInData.email, password: signInData.password , role: "admin"}
-        // dispatch(loginUser(user));
+        dispatch(loginUser(user));
         setSignInData({email: "", password: ""})
     }
     return (
