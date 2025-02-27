@@ -5,10 +5,12 @@ import {Dashboard} from "./pages/Dashboard.tsx";
 import {Books} from "./pages/Books.tsx";
 import {Users} from "./pages/Users.tsx";
 import {Orders} from "./pages/Orders.tsx";
+import {SignInForm} from "./component/SignInForm.tsx";
 
 function App() {
   const routers = createBrowserRouter([
-    {
+    { path: "/signIn", element: <SignInForm /> },
+      {
       path: "",
       element: <RootLayout/>,
       children: [
