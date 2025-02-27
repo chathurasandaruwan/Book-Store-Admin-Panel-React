@@ -2,6 +2,7 @@ import {Order} from "../interface/Order.ts";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import axios from "axios";
 import {toast} from "react-toastify";
+import {RootState} from "../store/Store.ts";
 
 const initialState : Order[] = [];
 
@@ -12,10 +13,17 @@ const api = axios.create({
 // get All orders
 export const getOrdersData = createAsyncThunk(
     'order/getOrder',
-    async (arg,{ rejectWithValue })=>{
+    async (arg,{ rejectWithValue,getState })=>{
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.get('/all');
+            const response = await api.get('/all',{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
@@ -24,10 +32,17 @@ export const getOrdersData = createAsyncThunk(
 )
 export const updateOrderData = createAsyncThunk(
     'order/updateOrder',
-    async ({orderId,status}:{orderId:string,status:"pending" | "complete"},{ rejectWithValue })=>{
+    async ({orderId,status}:{orderId:string,status:"pending" | "complete"},{ rejectWithValue,getState })=>{
+        const state: RootState = getState() as RootState;
+        const token = state.authData.jwt_token;
         await new Promise((resolve) => setTimeout(resolve, 1000));
         try {
-            const response = await api.put('/update/'+orderId,{status:status});
+            const response = await api.put('/update/'+orderId,{status:status},{
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
             return response.data;
         }catch (error:any) {
             return rejectWithValue(error.response?.data || "Something went wrong");
